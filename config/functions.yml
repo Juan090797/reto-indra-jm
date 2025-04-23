@@ -1,0 +1,47 @@
+appointment:
+  handler: src/infrastructure/handlers/appointmentHandler.handler
+  events:
+    - http:
+        path: appointment
+        method: post
+    - http:
+        path: appointments/{insuredId}
+        method: get
+    # - eventBridge:
+    #     eventBus: agendamientos-event-bus
+    #     pattern:
+    #       source:
+    #         - "com.reto.appointment"
+    #       detail-type:
+    #         - "AppointmentCreated"
+    #       detail:
+    #         status:
+    #           - "completed"
+
+# appointment_pe:
+#   handler: src/infrastructure/handlers/appointmentPeHandler.main
+#   events:
+#     - eventBridge:
+#         eventBus: agendamientos-event-bus
+#         pattern:
+#           source:
+#             - "com.reto.appointment.pe"
+#           detail-type:
+#             - "AppointmentProcessed"
+#           detail:
+#             country:
+#               - "PE"
+
+# appointment_cl:
+#   handler: src/infrastructure/handlers/appointmentClHandler.main
+#   events:
+#     - eventBridge:
+#         eventBus: agendamientos-event-bus
+#         pattern:
+#           source:
+#             - "com.reto.appointment.cl"
+#           detail-type:
+#             - "AppointmentProcessed"
+#           detail:
+#             country:
+#               - "CL"
