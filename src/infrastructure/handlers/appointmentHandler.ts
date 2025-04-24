@@ -2,7 +2,6 @@ import { APIGatewayEvent, SQSEvent } from "aws-lambda";
 import { HANDLER_EVENTS, HTTP_METHODS } from "../../shared/constants";
 import { AppointmentService } from "../../application/services/appointment.service";
 
-
 const appointmentService = new AppointmentService();
 
 export const handler = async (event: APIGatewayEvent | SQSEvent) => {
@@ -29,12 +28,7 @@ const handleAPIGatewayEvent = async (event: APIGatewayEvent) => {
     console.log(event);
     console.log(event.httpMethod);
     if (event.httpMethod === HTTP_METHODS.GET) {
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                message: 'Hello from API Gateway  GET!',
-            }),
-        };
+        return await appointmentService.getAppointmentsByInsuredId(event.pathParameters?.insuredId || '');
     }else if (event.httpMethod === HTTP_METHODS.POST) {
         return await appointmentService.createAppointment(JSON.parse(event.body || '{}'));
     } else {
@@ -45,7 +39,6 @@ const handleAPIGatewayEvent = async (event: APIGatewayEvent) => {
             }),
         };
     }
-
 }
 
 const handleSQSEvent = async (event: SQSEvent) => {

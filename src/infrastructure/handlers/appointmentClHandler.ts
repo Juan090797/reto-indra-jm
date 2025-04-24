@@ -1,6 +1,6 @@
 
 export const main = async (event: any) => {
-    console.log("Handling event");
+    console.log("Handling event CHILE");
     console.log(event);
     return {
         statusCode: 200,

@@ -1,5 +1,5 @@
 export interface Schedule {
-    scheduleId: string;
+    scheduleId:  number;
     centerId: number;
     specialtyId: number;
     medicId: number;

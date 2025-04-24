@@ -18,8 +18,44 @@ provider:
         - dynamodb:ListTables
       Resource:
         - arn:aws:dynamodb:${self:provider.region}:*:table/Appointments
+        - arn:aws:dynamodb:${self:provider.region}:*:table/Appointments/index/insuredIdIndex
+    - Effect: Allow
+      Action:
+        - sns:Publish
+        - sns:Subscribe
+        - sns:Unsubscribe
+        - sns:GetTopicAttributes
+        - sns:SetTopicAttributes
+        - sns:ListSubscriptionsByTopic
+      Resource:
+        - arn:aws:sns:${self:provider.region}:*:appointment-created-topic
+    - Effect: Allow
+      Action:
+        - sqs:SendMessage
+        - sqs:ReceiveMessage
+        - sqs:DeleteMessage
+        - sqs:GetQueueAttributes
+        - sqs:SetQueueAttributes
+        - sqs:ListQueues
+      Resource:
+        - arn:aws:sqs:${self:provider.region}:*:appointment-created-queue-pe
+        - arn:aws:sqs:${self:provider.region}:*:appointment-created-queue-cl
+    - Effect: Allow
+      Action:
+        - rds:DescribeDBInstances
+        - rds:Connect
+      Resource:
+        - arn:aws:rds:${self:provider.region}:*:db:mysql-pe
+        - arn:aws:rds:${self:provider.region}:*:db:mysql-cl
+        
   environment:
     DYNAMODB_APPOINTMENTS: Appointments
+    SNS_APPOINTMENT_CREATED_TOPIC_ARN: arn:aws:sns:${self:provider.region}:${aws:accountId}:appointment-created-topic
+    DB_HOST_PE: "mysql-pe.cudwems2iy22.us-east-1.rds.amazonaws.com"
+    DB_USERNAME_PE: "admin"
+    DB_PASSWORD_PE: "P4sw0rd1997"
+    DB_NAME_PE: "mysql_peru"
+    DB_PORT_PE: "3306"
 
 functions: ${file(./config/functions.yml)}
 

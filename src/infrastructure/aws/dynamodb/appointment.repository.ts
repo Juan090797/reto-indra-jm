@@ -3,6 +3,7 @@ import { Appointment } from "../../../domain/entities/appointment.entity";
 import { AppointmentDynamoRepository } from "../../../domain/repositories/appointmentDynamo.repository";
 import { dynamoDb } from "../../config/dynamodb.config";
 import { EnvConfig } from '../../config/env.config';
+import { QueryCommand } from '@aws-sdk/lib-dynamodb';
 
 export class DynamoDBAppointmentRepository implements AppointmentDynamoRepository {
     private readonly tableName: string;
@@ -12,16 +13,43 @@ export class DynamoDBAppointmentRepository implements AppointmentDynamoRepositor
         this.tableName = this.envConfig.get<string>('DYNAMODB_APPOINTMENTS');
     }
 
-    getAppointmentsByInsuredId(insuredId: string): Promise<Appointment[]> {
-        throw new Error("Method not implemented.");
+    async getAppointmentsByInsuredId(insuredId: string): Promise<Appointment[]> {
 
+        if (!insuredId) {
+            throw new Error("Invalid insuredId");
+        }
+
+        const params = {
+            TableName: this.tableName,
+            IndexName: 'insuredIdIndex',
+            KeyConditionExpression: 'insuredId = :insuredId',
+            ExpressionAttributeValues: {
+                ':insuredId': insuredId,
+            },
+        };
+    
+        try {
+            const result = await dynamoDb.send(new QueryCommand(params));            
+            console.log(`Citas recuperadas para insuredId (${insuredId}):`, result.Items);
+
+            return result.Items as Appointment[] || [];
+    
+        } catch (error) {
+            console.error(`Error al obtener citas para insuredId (${insuredId}):`, error);
+            throw error;
+        }
+        
     }
 
     async createAppointment(appointment: Appointment): Promise<any> {
         const params = {
             TableName: this.tableName,
             Item: {
-                ...appointment,
+                id: appointment.id,
+                insuredId: appointment.insuredId,
+                scheduleId: appointment.scheduleId,
+                countryISO: appointment.countryISO,
+                status: appointment.status,
                 createdAt: appointment.createdAt.toISOString(),
                 updatedAt: appointment.updatedAt.toISOString(),
             }
