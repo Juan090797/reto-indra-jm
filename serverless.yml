@@ -4,6 +4,7 @@ provider:
   name: aws
   runtime: nodejs20.x
   region: us-east-1
+  stage: dev
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -51,7 +52,7 @@ provider:
     - Effect: Allow
       Action:
         - events:PutEvents
-      Resource: arn:aws:events:${self:provider.region}:410920891956:event-bus/appointment-confirm-bus
+      Resource: arn:aws:events:${self:provider.region}:*:event-bus/appointment-confirm-bus
         
   environment:
     DYNAMODB_APPOINTMENTS: Appointments
@@ -59,7 +60,7 @@ provider:
     EVENT_BUS_NAME: "appointment-confirm-bus"
     EVENT_SOURCE: "com.reto.appointment"
     EVENT_DETAIL_TYPE: "AppointmentCreated"
-    
+  
 functions: ${file(./config/functions.yml)}
 
 resources:
@@ -67,12 +68,28 @@ resources:
 
 plugins:
   - serverless-offline
-  #- serverless-dotenv-plugin
+  - serverless-dotenv-plugin
+  # - serverless-auto-swagger
 
 package:
   patterns:
-    - 'dist/**'            # Incluye todo lo de la carpeta dist
-    - 'package.json'       # Incluye el archivo package.json
-    - '!node_modules/**'   # Excluye node_modules
-    - '!test/**'           # Excluye archivos de prueba
-    - '!docs/**'           # Excluye archivos de documentación
+    - 'dist/**'
+    - 'docs/**'            
+    - 'package.json'       
+    - '!node_modules/**'   
+    - '!test/**'           
+
+# custom:
+#   autoswagger:
+#     apiType: 'http'
+#     basePath: '/'
+#     generateSwaggerOnDeploy: true
+#     swaggerPath: 'swagger'
+#     schemes: ['http', 'https']
+#     excludeStages: ['production'] # Opcional
+#     title: 'API de Citas Médicas'  # Título de tu API
+#     # version: '1.0.0'  # Esto va dentro de info (ver abajo)
+#     # info:
+#     #   version: '1.0.0'
+#     #   description: 'Documentación automática para el sistema de citas médicas'
+#     host: 'localhost:3000'  # Solo para desarrollo local

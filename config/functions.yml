@@ -3,7 +3,7 @@ appointment:
   events:
     - http:
         path: appointment
-        method: post
+        method: post 
     - http:
         path: appointments/{insuredId}
         method: get
@@ -20,11 +20,11 @@ appointment_pe:
           Fn::GetAtt: [AppointmentQueuePESqs, Arn]
         batchSize: 5
   environment:
-    DB_HOST_PE: "mysql-pe.cudwems2iy22.us-east-1.rds.amazonaws.com"
-    DB_USERNAME_PE: "admin"
-    DB_PASSWORD_PE: "P4sw0rd1997"
-    DB_NAME_PE: "mysql_peru"
-    DB_PORT_PE: "3306"
+    DB_HOST_PE: ${env:DB_HOST_PE}
+    DB_USERNAME_PE: ${env:DB_USER_PE}
+    DB_PASSWORD_PE: ${env:DB_PASSWORD_PE}
+    DB_NAME_PE: ${env:DB_NAME_PE}
+    DB_PORT_PE: ${env:DB_PORT_PE}
 
 appointment_cl:
   handler: src/infrastructure/handlers/appointmentClHandler.main
@@ -34,10 +34,17 @@ appointment_cl:
           Fn::GetAtt: [AppointmentQueueCLSqs, Arn]
         batchSize: 5
   environment:
-    DB_HOST_CL: "mysql-cl.cudwems2iy22.us-east-1.rds.amazonaws.com"
-    DB_USERNAME_CL: "admin"
-    DB_PASSWORD_CL: "P4sw0rd1997"
-    DB_NAME_CL: "mysql_chile"
-    DB_PORT_CL: "3306"
+    DB_HOST_CL: ${env:DB_HOST_CL}
+    DB_USERNAME_CL: ${env:DB_USER_CL}
+    DB_PASSWORD_CL: ${env:DB_PASSWORD_CL}
+    DB_NAME_CL: ${env:DB_NAME_CL}
+    DB_PORT_CL: ${env:DB_PORT_CL}
+
+# docs:
+#   handler: src/infrastructure/handlers/docsHandler.main
+#   events:
+#     - http:
+#         path: docs
+#         method: get
 
 

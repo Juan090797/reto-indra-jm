@@ -8,9 +8,14 @@ const configDBPe = {
     port: Number(process.env.DB_PORT_PE),
 };
 
-
 const getConnectionMysqlPe = async () => {
     try {
+        console.log( 'host: ' + process.env.DB_HOST_PE );
+        console.log( 'user: ' + process.env.DB_USERNAME_PE );
+        console.log( 'password: ' + process.env.DB_PASSWORD_PE );
+        console.log( 'database: ' + process.env.DB_NAME_PE );
+        console.log( 'port: ' + process.env.DB_PORT_PE );
+        
         const connection = await mysql.createConnection(configDBPe);
         console.log("Conexión exitosa a la base de datos MySQL.");
         return connection;
