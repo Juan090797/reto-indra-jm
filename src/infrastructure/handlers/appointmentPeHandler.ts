@@ -10,7 +10,7 @@ export const main = async (event: any) => {
     console.log(event);
 
     if(HANDLER_EVENTS.SQS in event) {
-        handleSQSEvent(event as SQSEvent);
+        await handleSQSEvent(event as SQSEvent);
     }else{
         console.error("Unknown event type", event);
         return {

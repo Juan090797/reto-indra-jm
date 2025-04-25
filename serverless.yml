@@ -51,12 +51,10 @@ provider:
   environment:
     DYNAMODB_APPOINTMENTS: Appointments
     SNS_APPOINTMENT_CREATED_TOPIC_ARN: arn:aws:sns:${self:provider.region}:${aws:accountId}:appointment-created-topic
-    DB_HOST_PE: "mysql-pe.cudwems2iy22.us-east-1.rds.amazonaws.com"
-    DB_USERNAME_PE: "admin"
-    DB_PASSWORD_PE: "P4sw0rd1997"
-    DB_NAME_PE: "mysql_peru"
-    DB_PORT_PE: "3306"
-
+    EVENT_BUS_NAME: "appointment-confirm-bus"
+    EVENT_SOURCE: "com.reto.appointment"
+    EVENT_DETAIL_TYPE: "AppointmentCreated"
+    
 functions: ${file(./config/functions.yml)}
 
 resources:
@@ -64,7 +62,7 @@ resources:
 
 plugins:
   - serverless-offline
-  - serverless-dotenv-plugin
+  #- serverless-dotenv-plugin
 
 package:
   patterns:

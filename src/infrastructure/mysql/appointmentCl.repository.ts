@@ -1,8 +1,9 @@
 import { Appointment } from "../../domain/entities/appointment.entity";
-import { AppointmentMysqlPeRepository } from "../../domain/repositories/appointmentMysqlPe.repository";
-import getConnectionMysqlPe from "../config/mysqldbPe.config";
+import { AppointmentMysqlClRepository } from "../../domain/repositories/appointmentMysqlCl.repository";
 
-export class MysqlAppointmentPeRepository implements AppointmentMysqlPeRepository {
+import getConnectionMysqlCl from "../config/mysqldbCl.config";
+
+export class MysqlAppointmentClRepository implements AppointmentMysqlClRepository {
 
     async createAppointment(appointment: Appointment): Promise<void> {
         console.log("📥 Punto para insertar los datos:");
@@ -28,7 +29,7 @@ export class MysqlAppointmentPeRepository implements AppointmentMysqlPeRepositor
 
         try {
             console.log("🔗 Conectando a la base de datos MySQL...");
-            connection = await getConnectionMysqlPe();
+            connection = await getConnectionMysqlCl();
             const result = await connection.execute(query, values);
             console.log("✅ Resultado insert:", result);
         } catch (error: any) {
@@ -36,7 +37,7 @@ export class MysqlAppointmentPeRepository implements AppointmentMysqlPeRepositor
             throw error;
         }finally {
             if (connection) {
-                connection.end();
+                connection.end(); // Asegúrate de cerrar la conexión después de usarla.
             }
         }
     }

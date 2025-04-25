@@ -43,7 +43,7 @@ const handleAPIGatewayEvent = async (event: APIGatewayEvent) => {
 
 const handleSQSEvent = async (event: SQSEvent) => {
     
-    console.log("Handling SQS event");
+    console.log("Handling SQS event ACTUALIZANDO CITA MEDICA");
     console.log(event);
     return {
         statusCode: 200,

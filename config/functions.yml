@@ -7,17 +7,11 @@ appointment:
     - http:
         path: appointments/{insuredId}
         method: get
-    # - eventBridge:
-    #     eventBus: agendamientos-event-bus
-    #     pattern:
-    #       source:
-    #         - "com.reto.appointment"
-    #       detail-type:
-    #         - "AppointmentCreated"
-    #       detail:
-    #         status:
-    #           - "completed"
-
+    - sqs:
+        arn:
+          Fn::GetAtt: [AppointmentQueueSqsCompleted, Arn]
+        batchSize: 5
+        
 appointment_pe:
   handler: src/infrastructure/handlers/appointmentPeHandler.main
   events:
@@ -25,6 +19,12 @@ appointment_pe:
         arn:
           Fn::GetAtt: [AppointmentQueuePESqs, Arn]
         batchSize: 5
+  environment:
+    DB_HOST_PE: "mysql-pe.cudwems2iy22.us-east-1.rds.amazonaws.com"
+    DB_USERNAME_PE: "admin"
+    DB_PASSWORD_PE: "P4sw0rd1997"
+    DB_NAME_PE: "mysql_peru"
+    DB_PORT_PE: "3306"
 
 appointment_cl:
   handler: src/infrastructure/handlers/appointmentClHandler.main
@@ -33,3 +33,11 @@ appointment_cl:
         arn:
           Fn::GetAtt: [AppointmentQueueCLSqs, Arn]
         batchSize: 5
+  environment:
+    DB_HOST_CL: "mysql-cl.cudwems2iy22.us-east-1.rds.amazonaws.com"
+    DB_USERNAME_CL: "admin"
+    DB_PASSWORD_CL: "P4sw0rd1997"
+    DB_NAME_CL: "mysql_chile"
+    DB_PORT_CL: "3306"
+
+

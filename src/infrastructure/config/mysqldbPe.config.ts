@@ -6,10 +6,18 @@ const configDBPe = {
     password: process.env.DB_PASSWORD_PE,
     database: process.env.DB_NAME_PE,
     port: Number(process.env.DB_PORT_PE),
-    waitForConnections: true,
-    connectionLimit: 10,
 };
 
-const poolPe = mysql.createPool(configDBPe);
 
-export default poolPe;
+const getConnectionMysqlPe = async () => {
+    try {
+        const connection = await mysql.createConnection(configDBPe);
+        console.log("Conexión exitosa a la base de datos MySQL.");
+        return connection;
+    } catch (error: any) {
+        console.error("Error al conectar a la base de datos MySQL:", error.message);
+        throw error;
+    }
+}
+
+export default getConnectionMysqlPe;
