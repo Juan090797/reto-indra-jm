@@ -25,7 +25,7 @@ export const main = async (event: any) => {
 const handleSQSEvent = async (event: SQSEvent) => {
     
     console.log("Handling SQS event 0");
-    console.log(event);
+    console.log("RECORDS");
 
     for (const record of event.Records) {
         console.log("Processing SQS message 1");

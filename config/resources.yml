@@ -55,11 +55,19 @@ AppointmentQueuePESqs:
   Type: AWS::SQS::Queue
   Properties:
     QueueName: appointment-created-queue-pe
+    VisibilityTimeout: 60
 
 AppointmentQueueCLSqs:
   Type: AWS::SQS::Queue
   Properties:
     QueueName: appointment-created-queue-cl
+    VisibilityTimeout: 60
+
+AppointmentQueueSqsCompleted:
+  Type: AWS::SQS::Queue
+  Properties:
+    QueueName: appointment-created-queue-completed
+    VisibilityTimeout: 60
 
 AppointmentQueueSqsPolicy:
   Type: AWS::SQS::QueuePolicy
@@ -67,42 +75,42 @@ AppointmentQueueSqsPolicy:
     Queues:
       - !Ref AppointmentQueuePESqs
       - !Ref AppointmentQueueCLSqs
-    PolicyDocument:
-      Statement:
-        - Effect: Allow
-          Principal: '*'
-          Action: SQS:SendMessage
-          Resource: !GetAtt AppointmentQueuePESqs.Arn
-          Condition:
-            ArnEquals:
-              aws:SourceArn: !Ref AppointmentCreatedTopicSns
-        - Effect: Allow
-          Principal: '*'
-          Action: SQS:SendMessage
-          Resource: !GetAtt AppointmentQueueCLSqs.Arn
-          Condition:
-            ArnEquals:
-              aws:SourceArn: !Ref AppointmentCreatedTopicSns
-
-AppointmentQueueSqsConfirmPolicy:
-  Type: AWS::SQS::QueuePolicy
-  Properties:
-    Queues:
       - !Ref AppointmentQueueSqsCompleted
     PolicyDocument:
       Statement:
         - Effect: Allow
           Principal: '*'
           Action: SQS:SendMessage
-          Resource: !GetAtt AppointmentQueueSqsCompleted.Arn
+          Resource: 
+            - !GetAtt AppointmentQueuePESqs.Arn
           Condition:
             ArnEquals:
-              aws:SourceArn: !Ref AppointmentConfirmTopicSns
+              aws:SourceArn: !Ref AppointmentCreatedTopicSns
+        - Effect: Allow
+          Principal: '*'
+          Action: SQS:SendMessage
+          Resource: 
+            - !GetAtt AppointmentQueueCLSqs.Arn
+          Condition:
+            ArnEquals:
+              aws:SourceArn: !Ref AppointmentCreatedTopicSns
+        - Effect: Allow
+          Principal: 
+            Service: "events.amazonaws.com"
+          Action: "SQS:SendMessage"
+          Resource: 
+            - !GetAtt AppointmentQueueSqsCompleted.Arn
+
+AppointmentConfirmBus:
+  Type: AWS::Events::EventBus
+  Properties:
+    Name: appointment-confirm-bus
 
 EventBridgeRule:
   Type: AWS::Events::Rule
   Properties:
-    Name: appointment-confirm-bus
+    Name: appointment-confirm-rule
+    EventBusName: !Ref AppointmentConfirmBus
     EventPattern:
       source:
         - "com.reto.appointment"
@@ -114,10 +122,24 @@ EventBridgeRule:
     Targets:
       - Arn: !GetAtt AppointmentQueueSqsCompleted.Arn
         Id: "AppointmentQueueSqsCompletedTarget"
+        RoleArn: !GetAtt EventBridgeToSQSRole.Arn     
 
-AppointmentQueueSqsCompleted:
-  Type: AWS::SQS::Queue
+EventBridgeToSQSRole:
+  Type: AWS::IAM::Role
   Properties:
-    QueueName: appointment-created-queue-completed
-
-
+    AssumeRolePolicyDocument:
+      Version: "2012-10-17"
+      Statement:
+        - Effect: Allow
+          Principal:
+            Service: events.amazonaws.com
+          Action: sts:AssumeRole
+    Policies:
+      - PolicyName: AllowSendMessageToSQS
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - sqs:SendMessage
+              Resource: !GetAtt AppointmentQueueSqsCompleted.Arn

@@ -8,9 +8,9 @@ appointment:
         path: appointments/{insuredId}
         method: get
     - sqs:
-        arn:
-          Fn::GetAtt: [AppointmentQueueSqsCompleted, Arn]
-        batchSize: 5
+          arn:
+            Fn::GetAtt: [AppointmentQueueSqsCompleted, Arn]
+          batchSize: 1
         
 appointment_pe:
   handler: src/infrastructure/handlers/appointmentPeHandler.main

@@ -33,6 +33,23 @@ export class AppointmentService {
 
     }
 
+    async updateAppointment(appointmentId: string): Promise<any> {
+        console.log("updateAppointment", appointmentId);
+        if (!appointmentId) {
+            throw new Error("Invalid appointmentId");
+        }
+        const response = await this.appointmentRepository.updateAppointment(appointmentId);
+        console.log("response final", response);
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                message: 'Appointment updated successfully',
+                appointment: response,
+            }),
+        }
+    }
+
     async getAppointmentsByInsuredId(insuredId: string): Promise<any> {
         console.log("getAppointmentsByInsuredId", insuredId);
         if (!insuredId) {

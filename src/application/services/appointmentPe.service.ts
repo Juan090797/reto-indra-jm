@@ -12,7 +12,7 @@ export class AppointmentPeService {
     }
     
     async createAppointment(appointment: Appointment): Promise<any> {
-        console.log("Creating appointment in service", appointment);
+        console.log("Creating appointment in service appointmentPe.service.ts");
         if (!appointment) {
             throw new Error("Invalid appointment appointment");
         }
@@ -28,7 +28,7 @@ export class AppointmentPeService {
         return {
             statusCode: 200,
             body: JSON.stringify({
-                message: 'Appointment created successfully',
+                message: 'Appointment created successfully AppointmentPeService',
             }),
         }
 

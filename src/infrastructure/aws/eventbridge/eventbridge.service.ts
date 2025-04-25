@@ -12,10 +12,11 @@ export class EventBridgeService implements AppointmentEventService {
         this.envConfig = new EnvConfig();
         this.eventBusName = this.envConfig.get<string>('EVENT_BUS_NAME');
         this.eventSource = this.envConfig.get<string>('EVENT_SOURCE');
-        this.eventType = this.envConfig.get<string>('EVENT_TYPE');
+        this.eventType = this.envConfig.get<string>('EVENT_DETAIL_TYPE');
     }
 
     async publishAppointmentConfirmed(appointmentId: string): Promise<void> {
+        console.log("Publishing appointment confirmed event to EventBridge");
 
         const params = {
             Entries: [
@@ -23,21 +24,26 @@ export class EventBridgeService implements AppointmentEventService {
                     Source: this.eventSource,
                     DetailType: this.eventType,
                     Detail: JSON.stringify({
-                        appointmentId
+                        appointmentId,
+                        status: "completed"
                     }),
                     EventBusName: this.eventBusName,
                 }
             ]
         };
+        console.log("EventBridge params:", JSON.stringify(params));
 
         try {
             const result = await eventBridgeClient.send(new PutEventsCommand(params));
+            console.log("EventBridge result:", JSON.stringify(result));
             if (result.FailedEntryCount && result.FailedEntryCount > 0) {
                 console.error('Error al publicar eventos:', JSON.stringify(result.Entries));
             }
         } catch (error) {
             console.error('Error al publicar en EventBridge:', error);
             throw error;
+        }finally {
+            console.log("EventBridge publishAppointmentConfirmed finished");
         }
     }
 }

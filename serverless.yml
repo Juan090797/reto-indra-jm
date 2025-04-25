@@ -40,6 +40,7 @@ provider:
       Resource:
         - arn:aws:sqs:${self:provider.region}:*:appointment-created-queue-pe
         - arn:aws:sqs:${self:provider.region}:*:appointment-created-queue-cl
+        - arn:aws:sqs:${self:provider.region}:*:appointment-created-queue-completed
     - Effect: Allow
       Action:
         - rds:DescribeDBInstances
@@ -47,6 +48,10 @@ provider:
       Resource:
         - arn:aws:rds:${self:provider.region}:*:db:mysql-pe
         - arn:aws:rds:${self:provider.region}:*:db:mysql-cl
+    - Effect: Allow
+      Action:
+        - events:PutEvents
+      Resource: arn:aws:events:${self:provider.region}:410920891956:event-bus/appointment-confirm-bus
         
   environment:
     DYNAMODB_APPOINTMENTS: Appointments

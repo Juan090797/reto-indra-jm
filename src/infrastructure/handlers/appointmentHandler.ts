@@ -4,8 +4,8 @@ import { AppointmentService } from "../../application/services/appointment.servi
 
 const appointmentService = new AppointmentService();
 
-export const handler = async (event: APIGatewayEvent | SQSEvent) => {
-
+export const handler = async (event: any) => {
+    console.log("Ha llegado el evento a appointmentHandler.ts", event);
     if ( HANDLER_EVENTS.API_GATEWAY in event ) {     
         return handleAPIGatewayEvent(event as APIGatewayEvent);
     } else if ( HANDLER_EVENTS.SQS in event ) {
@@ -45,6 +45,9 @@ const handleSQSEvent = async (event: SQSEvent) => {
     
     console.log("Handling SQS event ACTUALIZANDO CITA MEDICA");
     console.log(event);
+    const data:any = JSON.parse(event.Records[0].body);
+    console.log("data", data);
+    await appointmentService.updateAppointment(data?.detail?.appointmentId);
     return {
         statusCode: 200,
         body: JSON.stringify({

@@ -13,7 +13,7 @@ export class AppointmentClService {
     }
     
     async createAppointment(appointment: Appointment): Promise<any> {
-        console.log("Creating appointment in service", appointment);
+        console.log("Creating appointment in service appointmentCl.service.ts");
         if (!appointment) {
             throw new Error("Invalid appointment appointment");
         }
