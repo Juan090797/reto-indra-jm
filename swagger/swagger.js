@@ -6,7 +6,7 @@
     "version": "1"
   },
   "paths": {
-    "/appointment": {
+    "/appointments": {
       "post": {
         "summary": "Create new medical appointment",
         "description": "Endpoint to schedule a new medical appointment for an insured patient",

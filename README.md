@@ -89,3 +89,9 @@ El sistema está diseñado utilizando una **arquitectura orientada a eventos**, 
 
 ### 3. Diagrama
 ![Diagrama del reto](https://i.postimg.cc/gjj5NsCW/Sin-t-tulo.png)
+
+## 4. Documentación Swagger
+
+Puedes acceder a la documentación completa de los endpoints a través de Swagger en el siguiente enlace:
+
+🔗 [Ver Documentación Swagger](https://k4nit9jt3h.execute-api.us-east-1.amazonaws.com/dev/swagger)
