@@ -60,36 +60,34 @@ provider:
     EVENT_BUS_NAME: "appointment-confirm-bus"
     EVENT_SOURCE: "com.reto.appointment"
     EVENT_DETAIL_TYPE: "AppointmentCreated"
-  
+
+custom:
+  autoswagger:
+    title: "API de agendamiento de cita médica para asegurados"
+    apiType: "http"
+    host: "k4nit9jt3h.execute-api.us-east-1.amazonaws.com"
+    basePath: "/dev"
+    schemes: ["https"]
+    swaggerPath: "swagger"
+    generateSwaggerOnDeploy: true
+    typefiles:
+      - "./src/domain/entities/appointmentSwagger.d.ts"
+
 functions: ${file(./config/functions.yml)}
 
 resources:
   Resources: ${file(./config/resources.yml)}
 
 plugins:
+  - serverless-auto-swagger
   - serverless-offline
   - serverless-dotenv-plugin
-  # - serverless-auto-swagger
 
 package:
   patterns:
+    - 'swagger/**'
     - 'dist/**'
     - 'docs/**'            
     - 'package.json'       
     - '!node_modules/**'   
     - '!test/**'           
-
-# custom:
-#   autoswagger:
-#     apiType: 'http'
-#     basePath: '/'
-#     generateSwaggerOnDeploy: true
-#     swaggerPath: 'swagger'
-#     schemes: ['http', 'https']
-#     excludeStages: ['production'] # Opcional
-#     title: 'API de Citas Médicas'  # Título de tu API
-#     # version: '1.0.0'  # Esto va dentro de info (ver abajo)
-#     # info:
-#     #   version: '1.0.0'
-#     #   description: 'Documentación automática para el sistema de citas médicas'
-#     host: 'localhost:3000'  # Solo para desarrollo local

@@ -12,7 +12,7 @@ export class AppointmentPeService {
     }
     
     async createAppointment(appointment: Appointment): Promise<any> {
-        console.log("Creating appointment in service appointmentPe.service.ts");
+
         if (!appointment) {
             throw new Error("Invalid appointment appointment");
         }
@@ -21,7 +21,7 @@ export class AppointmentPeService {
             await this.eventBridgeService.publishAppointmentConfirmed(appointment.id);
         }
         catch (error) {
-            console.error("Error creating appointment", error);
+
             throw new Error("Error creating appointment");
         }
 

@@ -5,7 +5,6 @@ import getConnectionMysqlPe from "../config/mysqldbPe.config";
 export class MysqlAppointmentPeRepository implements AppointmentMysqlPeRepository {
 
     async createAppointment(appointment: Appointment): Promise<void> {
-        console.log("📥 Punto para insertar los datos:");
 
         const formatDateToMySQL = (date: Date): string =>
             date.toISOString().slice(0, 19).replace('T', ' ');
@@ -21,18 +20,12 @@ export class MysqlAppointmentPeRepository implements AppointmentMysqlPeRepositor
             formatDateToMySQL(appointment.updatedAt)
         ];
 
-        console.log("🛠 Query MySQL:", query);
-        console.log("📦 Valores:", values);
-
         let connection;
 
         try {
-            console.log("🔗 Conectando a la base de datos MySQL...");
             connection = await getConnectionMysqlPe();
             const result = await connection.execute(query, values);
-            console.log("✅ Resultado insert:", result);
         } catch (error: any) {
-            console.error("⛔ Error MySQL:", error.message, error.code, error.sqlMessage);
             throw error;
         }finally {
             if (connection) {

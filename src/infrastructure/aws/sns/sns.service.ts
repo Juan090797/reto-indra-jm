@@ -14,7 +14,7 @@ export class SnsService implements AppointmentSnsService {
     }
 
     async publishAppointmentCreated(appointment: Appointment): Promise<void> {
-        console.log("Publishing appointment created event to SNS:", appointment);
+
         const params = {
             Message: JSON.stringify(appointment),
             TopicArn: this.topicArn,
@@ -25,8 +25,7 @@ export class SnsService implements AppointmentSnsService {
                 }
             }     
         };
-        console.log("Publishing message to SNS topic:", this.topicArn, params);
+
         await snsClient.send(new PublishCommand(params));
-        console.log("Message published to SNS topic enviado:", this.topicArn);
     }
 }

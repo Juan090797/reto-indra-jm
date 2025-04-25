@@ -5,7 +5,7 @@ import { AppointmentService } from "../../application/services/appointment.servi
 const appointmentService = new AppointmentService();
 
 export const handler = async (event: any) => {
-    console.log("Ha llegado el evento a appointmentHandler.ts", event);
+
     if ( HANDLER_EVENTS.API_GATEWAY in event ) {     
         return handleAPIGatewayEvent(event as APIGatewayEvent);
     } else if ( HANDLER_EVENTS.SQS in event ) {
@@ -24,9 +24,6 @@ export const handler = async (event: any) => {
 
 const handleAPIGatewayEvent = async (event: APIGatewayEvent) => {
     
-    console.log("Handling API Gateway event");
-    console.log(event);
-    console.log(event.httpMethod);
     if (event.httpMethod === HTTP_METHODS.GET) {
         return await appointmentService.getAppointmentsByInsuredId(event.pathParameters?.insuredId || '');
     }else if (event.httpMethod === HTTP_METHODS.POST) {
@@ -43,10 +40,7 @@ const handleAPIGatewayEvent = async (event: APIGatewayEvent) => {
 
 const handleSQSEvent = async (event: SQSEvent) => {
     
-    console.log("Handling SQS event ACTUALIZANDO CITA MEDICA");
-    console.log(event);
     const data:any = JSON.parse(event.Records[0].body);
-    console.log("data", data);
     await appointmentService.updateAppointment(data?.detail?.appointmentId);
     return {
         statusCode: 200,

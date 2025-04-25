@@ -6,8 +6,6 @@ import { AppointmentPeService } from "../../application/services/appointmentPe.s
 const appointmentPeService = new AppointmentPeService();
 
 export const main = async (event: any) => {
-    console.log("Handling event PERU");
-    console.log(event);
 
     if(HANDLER_EVENTS.SQS in event) {
         await handleSQSEvent(event as SQSEvent);
@@ -24,14 +22,9 @@ export const main = async (event: any) => {
 
 const handleSQSEvent = async (event: SQSEvent) => {
     
-    console.log("Handling SQS event 0");
-    console.log(event);
-
     for (const record of event.Records) {
-        console.log("Processing SQS message 1");
         const message = JSON.parse(record.body);
         const appointmentData = JSON.parse(message.Message);
-        console.log("Processing appointment data 2");
         const appointment = new Appointment({
             id: appointmentData.id,
             insuredId: appointmentData.insuredId,
@@ -41,9 +34,7 @@ const handleSQSEvent = async (event: SQSEvent) => {
             createdAt: new Date(appointmentData.createdAt),
             updatedAt: new Date(appointmentData.updatedAt),
         });
-        console.log("Creating appointment");
         await appointmentPeService.createAppointment(appointment);
-        console.log("Appointment created successfully");
     }
     
     return {

@@ -13,10 +13,8 @@ const configDBCl = {
 const getConnectionMysqlCl = async () => {
     try {
         const connection = await mysql.createConnection(configDBCl);
-        console.log("Conexión exitosa a la base de datos MySQL.");
         return connection;
     } catch (error: any) {
-        console.error("Error al conectar a la base de datos MySQL:", error.message);
         throw error;
     }
 }

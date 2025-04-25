@@ -6,8 +6,6 @@ import { AppointmentClService } from "../../application/services/appointmentCl.s
 const appointmentClService = new AppointmentClService();
 
 export const main = async (event: any) => {
-    console.log("Handling event CHILE");
-    console.log(event);
 
     if(HANDLER_EVENTS.SQS in event) {
         await handleSQSEvent(event as SQSEvent);
@@ -24,14 +22,10 @@ export const main = async (event: any) => {
 
 const handleSQSEvent = async (event: SQSEvent) => {
     
-    console.log("Handling SQS event 0");
-    console.log("RECORDS");
-
     for (const record of event.Records) {
-        console.log("Processing SQS message 1");
+
         const message = JSON.parse(record.body);
         const appointmentData = JSON.parse(message.Message);
-        console.log("Processing appointment data 2");
         const appointment = new Appointment({
             id: appointmentData.id,
             insuredId: appointmentData.insuredId,
@@ -41,9 +35,8 @@ const handleSQSEvent = async (event: SQSEvent) => {
             createdAt: new Date(appointmentData.createdAt),
             updatedAt: new Date(appointmentData.updatedAt),
         });
-        console.log("Creating appointment");
+
         await appointmentClService.createAppointment(appointment);
-        console.log("Appointment created successfully");
     }
     
     return {

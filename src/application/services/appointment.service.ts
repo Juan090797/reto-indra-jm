@@ -34,12 +34,10 @@ export class AppointmentService {
     }
 
     async updateAppointment(appointmentId: string): Promise<any> {
-        console.log("updateAppointment", appointmentId);
         if (!appointmentId) {
             throw new Error("Invalid appointmentId");
         }
         const response = await this.appointmentRepository.updateAppointment(appointmentId);
-        console.log("response final", response);
 
         return {
             statusCode: 200,
@@ -51,12 +49,11 @@ export class AppointmentService {
     }
 
     async getAppointmentsByInsuredId(insuredId: string): Promise<any> {
-        console.log("getAppointmentsByInsuredId", insuredId);
+
         if (!insuredId) {
             throw new Error("Invalid insuredId");
         }
         const response = await this.appointmentRepository.getAppointmentsByInsuredId(insuredId);
-        console.log("response final", response);
 
         return {
             statusCode: 200,

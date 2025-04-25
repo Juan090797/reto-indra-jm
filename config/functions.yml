@@ -3,10 +3,35 @@ appointment:
   events:
     - http:
         path: appointment
-        method: post 
+        method: post
+        summary: "Create new medical appointment"
+        description: "Endpoint to schedule a new medical appointment for an insured patient"
+        swaggerTags: ["Appointments"]
+        bodyType: "AppointmentRequest" # Referencia al tipo en tus archivos .d.ts
+        responseData:
+          201:
+            description: "Appointment created successfully"
+            bodyType: "AppointmentResponse"
+          400:
+            description: "Invalid input data"
+          500:
+            description: "Internal server error"
+        operationId: "createAppointment"
     - http:
         path: appointments/{insuredId}
         method: get
+        summary: "Get appointments by insured ID"
+        description: "Retrieve all appointments for a specific insured person"
+        swaggerTags: ["Appointments"]
+        responseData:
+          200:
+            description: "List of appointments"
+            bodyType: "AppointmentListResponse"
+          404:
+            description: "No appointments found for this insured ID"
+          500:
+            description: "Internal server error"
+        operationId: "getAppointmentsByInsuredId"
     - sqs:
           arn:
             Fn::GetAtt: [AppointmentQueueSqsCompleted, Arn]
@@ -39,12 +64,4 @@ appointment_cl:
     DB_PASSWORD_CL: ${env:DB_PASSWORD_CL}
     DB_NAME_CL: ${env:DB_NAME_CL}
     DB_PORT_CL: ${env:DB_PORT_CL}
-
-# docs:
-#   handler: src/infrastructure/handlers/docsHandler.main
-#   events:
-#     - http:
-#         path: docs
-#         method: get
-
 

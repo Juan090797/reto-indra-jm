@@ -15,7 +15,7 @@ export class DynamoDBAppointmentRepository implements AppointmentDynamoRepositor
     }
 
     async updateAppointment(appointmentId: string): Promise<any> {
-        console.log("updateAppointment", appointmentId);
+
         if (!appointmentId) {
             throw new Error("Invalid appointmentId");
         }
@@ -37,7 +37,6 @@ export class DynamoDBAppointmentRepository implements AppointmentDynamoRepositor
         };
 
         const result = await dynamoDb.send(new UpdateCommand(params));
-        console.log('Cita actualizada en BD DynamoDB:', result.Attributes);
 
         return result.Attributes;
     }
@@ -59,7 +58,6 @@ export class DynamoDBAppointmentRepository implements AppointmentDynamoRepositor
     
         try {
             const result = await dynamoDb.send(new QueryCommand(params));            
-            console.log(`Citas recuperadas para insuredId (${insuredId}):`, result.Items);
 
             return result.Items as Appointment[] || [];
     
@@ -84,7 +82,6 @@ export class DynamoDBAppointmentRepository implements AppointmentDynamoRepositor
             }
         };
         await dynamoDb.send(new PutCommand(params));
-        console.log('Cita guardada en BD DynamoDB:', params.Item);
         return params.Item;
     }
     

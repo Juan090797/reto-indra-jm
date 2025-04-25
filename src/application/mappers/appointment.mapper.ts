@@ -17,14 +17,4 @@ export class AppointmentMapper {
             }
         );
     }
-
-    // static toDto(appointment: Appointment): CreateAppointmentDto {
-    //     return {
-    //         insuredId: appointment.insuredId,
-    //         scheduleId: appointment.scheduleId,
-    //         countryISO: appointment.countryISO,
-    //         createdAt: appointment.createdAt.toISOString(),
-    //         updatedAt: appointment.updatedAt.toISOString()
-    //     };
-    // }
 }

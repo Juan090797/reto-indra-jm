@@ -16,7 +16,6 @@ export class EventBridgeService implements AppointmentEventService {
     }
 
     async publishAppointmentConfirmed(appointmentId: string): Promise<void> {
-        console.log("Publishing appointment confirmed event to EventBridge");
 
         const params = {
             Entries: [
@@ -31,19 +30,15 @@ export class EventBridgeService implements AppointmentEventService {
                 }
             ]
         };
-        console.log("EventBridge params:", JSON.stringify(params));
 
         try {
             const result = await eventBridgeClient.send(new PutEventsCommand(params));
-            console.log("EventBridge result:", JSON.stringify(result));
             if (result.FailedEntryCount && result.FailedEntryCount > 0) {
                 console.error('Error al publicar eventos:', JSON.stringify(result.Entries));
             }
         } catch (error) {
             console.error('Error al publicar en EventBridge:', error);
             throw error;
-        }finally {
-            console.log("EventBridge publishAppointmentConfirmed finished");
         }
     }
 }
