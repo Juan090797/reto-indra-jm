@@ -87,7 +87,7 @@ package:
   patterns:
     - 'swagger/**'
     - 'dist/**'
-    - 'docs/**'            
+    #- 'docs/**'            
     - 'package.json'       
     - '!node_modules/**'   
     - '!test/**'           

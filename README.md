@@ -37,8 +37,8 @@ El sistema está diseñado utilizando una **arquitectura orientada a eventos**, 
 
 ```json
 {
-  "insuredId": "00005",
-  "scheduleId": 2,
+  "insuredId": "00007",
+  "scheduleId": 7,
   "countryISO": "PE"
 }
 ```
@@ -46,19 +46,19 @@ El sistema está diseñado utilizando una **arquitectura orientada a eventos**, 
 
 ```json
 {
-    "message": "Appointment created successfully",
-    "appointment": {
-        "id": "c9b70ff0-8698-4f1a-bf57-f543e721cd1b",
-        "insuredId": "00005",
-        "scheduleId": 2,
+    "success": true,
+    "data": {
+        "id": "402d5e63-6b55-4765-ad8a-c6bcd1946413",
+        "insuredId": "00007",
+        "scheduleId": 7,
         "countryISO": "PE",
         "status": "PENDING",
-        "createdAt": "2025-04-25T20:41:21.953Z",
-        "updatedAt": "2025-04-25T20:41:21.953Z"
+        "createdAt": "2025-04-28T05:45:40.729Z",
+        "updatedAt": "2025-04-28T05:45:40.729Z"
     }
 }
 ```
-### 2. Consultar Cita Médica
+### 2. Consultar Citas Médicas de un asegurado
 
 **Método:** `GET`
   
@@ -66,23 +66,32 @@ El sistema está diseñado utilizando una **arquitectura orientada a eventos**, 
 `https://k4nit9jt3h.execute-api.us-east-1.amazonaws.com/dev/appointments/{insuredId}`
 
 **Ejemplo de consulta:**  
-`https://k4nit9jt3h.execute-api.us-east-1.amazonaws.com/dev/appointments/00005`
+`https://k4nit9jt3h.execute-api.us-east-1.amazonaws.com/dev/appointments/00007`
 
 **Respuesta esperada: (formato JSON):**
 
 ```json
 {
-    "message": "Appointments retrieved successfully",
-    "appointments": [
+    "success": true,
+    "data": [
         {
-            "insuredId": "00005",
-            "scheduleId": 2,
-            "updatedAt": "2025-04-25T22:16:05.531Z",
+            "insuredId": "00007",
+            "scheduleId": 7,
+            "updatedAt": "2025-04-28T05:10:07.055Z",
             "status": "COMPLETED",
-            "createdAt": "2025-04-25T22:16:04.393Z",
-            "id": "f6e18fc0-807c-4f80-b690-66cbc2197fa6",
+            "createdAt": "2025-04-28T05:10:05.735Z",
+            "id": "48f8c3fc-3448-4c24-9217-a3ba5e348543",
             "countryISO": "PE"
         },
+        {
+            "insuredId": "00007",
+            "scheduleId": 7,
+            "updatedAt": "2025-04-28T05:45:41.916Z",
+            "status": "COMPLETED",
+            "createdAt": "2025-04-28T05:45:40.729Z",
+            "id": "402d5e63-6b55-4765-ad8a-c6bcd1946413",
+            "countryISO": "PE"
+        }
     ]
 }
 ```
@@ -95,3 +104,7 @@ El sistema está diseñado utilizando una **arquitectura orientada a eventos**, 
 Puedes acceder a la documentación completa de los endpoints a través de Swagger en el siguiente enlace:
 
 🔗 [Ver Documentación Swagger](https://k4nit9jt3h.execute-api.us-east-1.amazonaws.com/dev/swagger)
+
+## 5. Pruebas unitarias
+![Resultados del testing](https://i.postimg.cc/TYw8g2F4/testing.png)
+
