@@ -8,8 +8,8 @@
   "paths": {
     "/appointments": {
       "post": {
-        "summary": "Create new medical appointment",
-        "description": "Endpoint to schedule a new medical appointment for an insured patient",
+        "summary": "Crear una nueva cita médica",
+        "description": "Endpoint para programar una nueva cita médica para un paciente asegurado",
         "tags": [
           "Appointments"
         ],
@@ -33,24 +33,24 @@
         ],
         "responses": {
           "201": {
-            "description": "Appointment created successfully",
+            "description": "Cita creada con éxito",
             "schema": {
               "$ref": "#/definitions/AppointmentResponse"
             }
           },
           "400": {
-            "description": "Invalid input data"
+            "description": "Datos de entrada no válidos"
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Error interno del servidor"
           }
         }
       }
     },
     "/appointments/{insuredId}": {
       "get": {
-        "summary": "Get appointments by insured ID",
-        "description": "Retrieve all appointments for a specific insured person",
+        "summary": "Listar citas por ID del asegurado",
+        "description": "Listar todas las citas de un asegurado",
         "tags": [
           "Appointments"
         ],
@@ -71,16 +71,16 @@
         ],
         "responses": {
           "200": {
-            "description": "List of appointments",
+            "description": "Lista de citas",
             "schema": {
               "$ref": "#/definitions/AppointmentListResponse"
             }
           },
           "404": {
-            "description": "No appointments found for this insured ID"
+            "description": "No se han encontrado citas para esta asegurado"
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Error interno del servidor"
           }
         }
       }
@@ -117,27 +117,101 @@
     },
     "AppointmentResponse": {
       "properties": {
-        "message": {
-          "title": "AppointmentResponse.message",
-          "type": "string"
+        "success": {
+          "title": "AppointmentResponse.success",
+          "enum": [
+            true
+          ],
+          "type": "boolean"
         },
-        "appointments": {
+        "data": {
+          "properties": {
+            "id": {
+              "title": "AppointmentResponse.data.id",
+              "type": "string"
+            },
+            "insuredId": {
+              "title": "AppointmentResponse.data.insuredId",
+              "type": "string"
+            },
+            "scheduleId": {
+              "title": "AppointmentResponse.data.scheduleId",
+              "type": "number"
+            },
+            "countryISO": {
+              "enum": [
+                "PE",
+                "CL"
+              ],
+              "title": "AppointmentResponse.data.countryISO",
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "PENDING",
+                "COMPLETED"
+              ],
+              "title": "AppointmentResponse.data.status",
+              "type": "string"
+            },
+            "createdAt": {
+              "title": "AppointmentResponse.data.createdAt",
+              "type": "string"
+            },
+            "updatedAt": {
+              "title": "AppointmentResponse.data.updatedAt",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "insuredId",
+            "scheduleId",
+            "countryISO",
+            "status",
+            "createdAt",
+            "updatedAt"
+          ],
+          "additionalProperties": false,
+          "title": "AppointmentResponse.data",
+          "type": "object"
+        }
+      },
+      "required": [
+        "success",
+        "data"
+      ],
+      "additionalProperties": false,
+      "title": "AppointmentResponse",
+      "type": "object"
+    },
+    "AppointmentListResponse": {
+      "properties": {
+        "success": {
+          "title": "AppointmentListResponse.success",
+          "type": "boolean"
+        },
+        "data": {
           "items": {
             "properties": {
               "id": {
-                "title": "AppointmentResponse.appointments.[].id",
+                "title": "AppointmentListResponse.data.[].id",
                 "type": "string"
               },
               "insuredId": {
-                "title": "AppointmentResponse.appointments.[].insuredId",
+                "title": "AppointmentListResponse.data.[].insuredId",
                 "type": "string"
               },
               "scheduleId": {
-                "title": "AppointmentResponse.appointments.[].scheduleId",
+                "title": "AppointmentListResponse.data.[].scheduleId",
                 "type": "number"
               },
               "countryISO": {
-                "title": "AppointmentResponse.appointments.[].countryISO",
+                "enum": [
+                  "PE",
+                  "CL"
+                ],
+                "title": "AppointmentListResponse.data.[].countryISO",
                 "type": "string"
               },
               "status": {
@@ -145,15 +219,15 @@
                   "PENDING",
                   "COMPLETED"
                 ],
-                "title": "AppointmentResponse.appointments.[].status",
+                "title": "AppointmentListResponse.data.[].status",
                 "type": "string"
               },
               "createdAt": {
-                "title": "AppointmentResponse.appointments.[].createdAt",
+                "title": "AppointmentListResponse.data.[].createdAt",
                 "type": "string"
               },
               "updatedAt": {
-                "title": "AppointmentResponse.appointments.[].updatedAt",
+                "title": "AppointmentListResponse.data.[].updatedAt",
                 "type": "string"
               }
             },
@@ -167,34 +241,16 @@
               "updatedAt"
             ],
             "additionalProperties": false,
-            "title": "AppointmentResponse.appointments.[]",
+            "title": "AppointmentListResponse.data.[]",
             "type": "object"
           },
-          "title": "AppointmentResponse.appointments",
+          "title": "AppointmentListResponse.data",
           "type": "array"
         }
       },
       "required": [
-        "message",
-        "appointments"
-      ],
-      "additionalProperties": false,
-      "title": "AppointmentResponse",
-      "type": "object"
-    },
-    "AppointmentListResponse": {
-      "properties": {
-        "message": {
-          "title": "AppointmentListResponse.message",
-          "type": "string"
-        },
-        "appointments": {
-          "title": "AppointmentListResponse.appointments"
-        }
-      },
-      "required": [
-        "message",
-        "appointments"
+        "success",
+        "data"
       ],
       "additionalProperties": false,
       "title": "AppointmentListResponse",

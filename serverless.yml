@@ -71,7 +71,7 @@ custom:
     swaggerPath: "swagger"
     generateSwaggerOnDeploy: true
     typefiles:
-      - "./src/domain/entities/appointmentSwagger.d.ts"
+      - "./src/swagger/appointmentSwagger.ts"
 
 functions: ${file(./config/functions.yml)}
 

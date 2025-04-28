@@ -1,36 +1,36 @@
 appointment:
-  handler: src/infrastructure/handlers/appointmentHandler.handler
+  handler: src/appointment/infrastructure/handlers/appointmentHandler.handler
   events:
     - http:
         path: appointments
         method: post
-        summary: "Create new medical appointment"
-        description: "Endpoint to schedule a new medical appointment for an insured patient"
+        summary: "Crear una nueva cita médica"
+        description: "Endpoint para programar una nueva cita médica para un paciente asegurado"
         swaggerTags: ["Appointments"]
-        bodyType: "AppointmentRequest" # Referencia al tipo en tus archivos .d.ts
+        bodyType: "AppointmentRequest"
         responseData:
           201:
-            description: "Appointment created successfully"
+            description: "Cita creada con éxito"
             bodyType: "AppointmentResponse"
           400:
-            description: "Invalid input data"
+            description: "Datos de entrada no válidos"
           500:
-            description: "Internal server error"
+            description: "Error interno del servidor"
         operationId: "createAppointment"
     - http:
         path: appointments/{insuredId}
         method: get
-        summary: "Get appointments by insured ID"
-        description: "Retrieve all appointments for a specific insured person"
+        summary: "Listar citas por ID del asegurado"
+        description: "Listar todas las citas de un asegurado"
         swaggerTags: ["Appointments"]
         responseData:
           200:
-            description: "List of appointments"
+            description: "Lista de citas"
             bodyType: "AppointmentListResponse"
           404:
-            description: "No appointments found for this insured ID"
+            description: "No se han encontrado citas para esta asegurado"
           500:
-            description: "Internal server error"
+            description: "Error interno del servidor"
         operationId: "getAppointmentsByInsuredId"
     - sqs:
           arn:
@@ -38,7 +38,7 @@ appointment:
           batchSize: 1
         
 appointment_pe:
-  handler: src/infrastructure/handlers/appointmentPeHandler.main
+  handler: src/appointment/infrastructure/handlers/appointmentPeHandler.main
   events:
     - sqs:
         arn:
@@ -52,7 +52,7 @@ appointment_pe:
     DB_PORT_PE: ${env:DB_PORT_PE}
 
 appointment_cl:
-  handler: src/infrastructure/handlers/appointmentClHandler.main
+  handler: src/appointment/infrastructure/handlers/appointmentClHandler.main
   events:
     - sqs:
         arn:
